@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamble</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    html{ 
+      /* --gamble_background: rgb(255, 255, 255);
+      --gamble_textBox_background: rgb(165, 42, 42);
+      --gamble_textBox_text: rgb(0, 0, 0);
+      --gamble_button1:  rgb(233, 196,196);
+      --gamble_button1_text:  rgb(0, 0, 0);
+      --gamble_button2:  rgb(226, 20, 20);
+      --gamble_button2_text:  rgb(0, 0, 0); */
+      --gamble_background: rgb(167, 107, 9);
+      --gamble_textBox_background: rgb(39, 42, 49);
+      --gamble_textBox_text: rgb(167, 93, 9);
+      --gamble_button1: rgb(39, 42, 49);
+      --gamble_button1_text: rgb(167, 107, 9);
+      --gamble_button2: rgb(39, 42, 49);
+      --gamble_button2_text: rgb(167, 107, 9);
+
+      /* linear-gradient(to top, rgb(167, 107, 9),rgb(221, 167, 79), rgb(167, 9, 27)) */
+
+      width: 100%;
+      height: 100%;
+      background: var(--gamble_background);
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body>
+  <div id="mainPage" style="display: none;">
+    <p id="topText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">Hello!</p>
+    <div onclick="hidePage('mainPage'); showPage('playAmountPage')" style="position: absolute; width: 90%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Play</div>
+    <div onclick="hidePage('mainPage'); showPage('debtPage')" style="position: absolute; width: 90%; height: 20%; top: 49.5%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Debt</div>
+   <div onclick="hidePage('mainPage'); showNotesPage()" style="position: absolute; width: 90%; height: 20%; top: 70%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Notes</div>
+   <div onclick="hidePage('mainPage'); showWalletsPage()" style="position: absolute; width: 90%; height: 20%; top: 90.5%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 58px;">Wallets</div>
+   <div onclick="hidePage('mainPage'); showPage('settingsPage')" style="position: absolute; width: 90%; height: 20%; top: 111%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 58px;">Settings</div>
+  </div>
+  <div id="playAmountPage" style="display: none;">
+    <p id="amountText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---How much do you want to bet:</p>
+    <input id="amountInput" type="number" min="1" placeholder="0" style="position: absolute; width: 89%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;"/>
+    <div onclick="gamble()" style="position: absolute; width: 90%; height: 20%; top: 50%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Ok</div>
+  </div>
+  <div id="playRewardPage" style="display: none;">
+    <p id="rewardText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">You...!</p>
+    <div onclick="hidePage('playRewardPage'); showMainPage()" style="position: absolute; width: 90%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Ok</div>
+  </div>
+  <div id="debtPage" style="display: none;">
+    <p id="debtText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---How much do you want to get:</p>
+    <input id="debtInput" type="number" placeholder="0" pattern="-?\d*" style="position: absolute; width: 89%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;"/>
+    <div onclick="applyDebt()" style="position: absolute; width: 90%; height: 20%; top: 50%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Ok</div>
+  </div>
+  <div id="notesPage" style="display: none;">
+    <p id="notesText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---Notes:</p>
+    <input id="notesInput" type="text" placeholder="text" style="position: absolute; width: 89%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 17px;"/>
+    <div onclick="applyNotes()" style="position: absolute; width: 90%; height: 20%; top: 50%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Ok</div>
+  </div>
+  <div id="walletsPage" style="display: none;">
+    <p id="walletsText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---Change wallet:</p>
+    <div onclick="hidePage('walletsPage'); showRenameWalletPage()" style="position: absolute; width: 90%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Rename wallet</div>
+    <div onclick="hidePage('walletsPage'); showLocalWalletsPage()" style="position: absolute; width: 90%; height: 20%; top: 49.5%; left: 5%; background-color: rgb(226, 20, 20); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Local wallet</div>
+    <div onclick="" style="position: absolute; width: 90%; height: 20%; top: 70%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">HTTP wallet</div>
+    <div onclick="" style="position: absolute; width: 90%; height: 20%; top: 90.5%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Bluetooth wallet</div>
+  </div>
+  <div id="renameWalletPage" style="display: none;">
+    <p id="renameWalletText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---New wallet name:</p>
+    <input id="renameWalletInput" type="text" placeholder="text" style="position: absolute; width: 89%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 17px;"/>
+    <div onclick="applyNewWalletName()" style="position: absolute; width: 90%; height: 20%; top: 50%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Ok</div>
+  </div>
+  <div id="localWalletsPage" style="display: none;">
+    <p id="localWalletsText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---Change local wallet:</p>
+    <div onclick="hidePage('localWalletsPage'); showChangeLocalWalletPage()" style="position: absolute; width: 90%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Change wallet</div>
+    <div onclick="applyDeleteActiveWallet();" style="position: absolute; width: 90%; height: 20%; top: 49.5%; left: 5%; background-color: rgb(226, 20, 20); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Delete wallet</div>
+    <div onclick="applyExportLocalWallet();" style="position: absolute; width: 90%; height: 20%; top: 70%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Export wallet</div>
+    <div onclick="applyImportLocalWallet();" style="position: absolute; width: 90%; height: 20%; top: 90.5%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Import wallet</div>
+  </div>
+  <div id="changeLocalWalletPage" style="display: none;">
+    <p id="changeLocalWalletText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---Which wallet do you want:</p>
+    <input id="changeLocalWalletInput" type="number" placeholder="0" pattern="-?\d*" style="position: absolute; width: 89%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;"/>
+    <div onclick="applyChangeLocalWallet()" style="position: absolute; width: 90%; height: 20%; top: 50%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Ok</div>
+  </div>
+  <div id="settingsPage" style="display: none;">
+    <p id="settingsText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---Gamble settings, enjoy ;):</p>
+    <div onclick="hidePage('settingsPage'); showThemesPage()" style="position: absolute; width: 90%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Gamble themes</div>
+    <div onclick="hidePage('settingsPage'); showSecretShopPage()" style="position: absolute; width: 90%; height: 20%; top: 49.5%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Secret shop</div>
+    <div onclick="hidePage('settingsPage'); showPage('creditsPage')" style="position: absolute; width: 90%; height: 20%; top: 70%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 42px;">Credits</div>
+  </div>
+  <div id="themesPage" style="display: none;">
+    <p id="themesText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---Gamble Themes:<br> -background<br> -textBoxBackground<br> -textBoxText<br> -button1<br> -button1Text<br> -button2<br> -button2Text</p>
+    <input id="backgroundThemes" type="text" placeholder="background" style="position: absolute; width: 89%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 17px;"/>
+    <input id="textBoxBackgroundThemes" type="text" placeholder="textBox_background" style="position: absolute; width: 89%; height: 20%; top: 49.5%; left: 5%; background-color: var(--gamble_button2); color: var(--gamble_button2_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 17px;"/>
+    <input id="textBoxTextThemes" type="text" placeholder="textBox_text" style="position: absolute; width: 89%; height: 20%; top: 70%; left: 5%; background-color: var(--gamble_button2); color: var(--gamble_button2_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 17px;"/>
+    <input id="button1Themes" type="text" placeholder="button1" style="position: absolute; width: 89%; height: 20%; top: 90.5%; left: 5%; background-color: var(--gamble_button2); color: var(--gamble_button2_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 17px;"/>
+    <input id="button1TextThemes" type="text" placeholder="button1_text" style="position: absolute; width: 89%; height: 20%; top: 111%; left: 5%; background-color: var(--gamble_button2); color: var(--gamble_button2_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 17px;"/>
+    <input id="button2Themes" type="text" placeholder="button2button2" style="position: absolute; width: 89%; height: 20%; top: 131.5%; left: 5%; background-color: var(--gamble_button2); color: var(--gamble_button2_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 17px;"/>
+    <input id="button2TextThemes" type="text" placeholder="button2_text" style="position: absolute; width: 89%; height: 20%; top: 152%; left: 5%; background-color: var(--gamble_button2); color: var(--gamble_button2_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 17px;"/>
+    <div onclick="applyThemes()" style="position: absolute; width: 90%; height: 20%; top: 172.5%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Ok</div>
+  </div>
+  <div id="secretShopPage" style="display: none;">
+    <p id="secretShopText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">Hello!</p>
+    <div onclick="hidePage('secretShopPage'); showSecretShopUpgradePage('atk')" style="position: absolute; width: 90%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Atk</div>
+    <div onclick="hidePage('secretShopPage'); showSecretShopUpgradePage('def')" style="position: absolute; width: 90%; height: 20%; top: 49.5%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Def</div>
+    <div onclick="hidePage('secretShopPage'); showSecretShopUpgradePage('intl')" style="position: absolute; width: 90%; height: 20%; top: 70%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Intl</div>
+    <div onclick="hidePage('secretShopPage'); showSecretShopUpgradePage('skill')" style="position: absolute; width: 90%; height: 20%; top: 90.5%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 58px;">Skill</div>
+    <div onclick="hidePage('secretShopPage'); showMainPage()" style="position: absolute; width: 90%; height: 20%; top: 111%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 58px;">Home</div>
+  </div>
+  <div id="secretShopUpgradePage" style="display: none;">
+    <p id="secretShopUpgradeText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---Enter upgrade amount:</p>
+    <input id="secretShopUpgradeInput" type="number" placeholder="0" pattern="-?\d*" style="position: absolute; width: 89%; height: 20%; top: 29%; left: 5%; background-color: var(--gamble_button1); color: var(--gamble_button1_text); border: none; text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;"/>
+    <div onclick="applyUpgrade()" style="position: absolute; width: 90%; height: 20%; top: 50%; left: 5%; background-color: var(--gamble_button2);color: var(--gamble_button2_text); text-align: center; align-items: center; justify-content: center; display: flex; font-family: 'Share Tech Mono', monospace; font-size: 64px;">Ok</div>
+  </div>
+  <div id="creditsPage" style="display: none;">
+    <p id="creditsText" style="position: absolute; width: 86%; height: 21%; top: 1%; left: 5%; background-color: var(--gamble_textBox_background);color: var(--gamble_textBox_text); text-align: left; padding: 2% 2%; align-items: top; justify-content: left; display: flex; font-family: 'Share Tech Mono', monospace; overflow: scroll; white-space: pre-line;">---Gamble Credits:<br> Made by Rory. Fist made for IOS shortcuts but then transfered to HTML for cross platform play. <br><br> Timeline: <br> •2022: Initial creation for IOS Shortcuts using Shortcuts and Toolbox Pro (121 actions). Features included 50/50, Debt, Notes, Wallet and Share Stats.<br> •2025: Due to a change in operating system from IOS to Android, IOS Shortcuts was no longer an option. Work began on a single file HTML game so that Gamble could be played cross-platform. By the end of 2025, features included Play, Debt, Notes aswell as settings including Gamble themes, the Secret shop and Credits were functionable. The Wallet section was in completion but not yet done.</p>
+  </div>
+  </div>
+<script>
+  let selectedUpgrade;
+
+  function showPage(page) {
+    document.getElementById(page).style.display = "block";
+  }
+
+  function hidePage(page) {
+    document.getElementById(page).style.display = "none";
+  }
+
+  function showMainPage() {
+    let balance = Number(localStorage.getItem('gamble_Balance')) || 0;
+    let debt = Number(localStorage.getItem('gamble_Debt')) || 0;
+    let notes = localStorage.getItem('gamble_Notes') || "";
+    let wallet = localStorage.getItem('gamble_Wallet') || "";
+    document.getElementById('topText').innerHTML = `Gamble:\n-Balance: £${balance}\n-Debt: -£${debt}\n-Total: £${balance-debt}\n-Wallet: ${wallet}\n\n-Notes: ${notes}`;
+    showPage("mainPage")
+  }
+
+  function showNotesPage() {
+    let notes = localStorage.getItem('gamble_Notes') || "";
+    document.getElementById('notesInput').value = notes;
+    showPage("notesPage");
+  }
+
+  function showWalletsPage() {
+    let walletName = localStorage.getItem('gamble_Wallet') || "does not have a name";
+    document.getElementById('walletsText').innerHTML = `---Change wallet${" (current wallet: "+walletName+")"}:`;
+    showPage("walletsPage");
+  }
+
+  function showRenameWalletPage() {
+    let walletName = localStorage.getItem('gamble_Wallet') || "";
+    document.getElementById('renameWalletInput').value = walletName;
+    showPage("renameWalletPage");
+  }
+
+  function showLocalWalletsPage() {
+    let walletName = localStorage.getItem('gamble_Wallet') || "does not have a name";
+    document.getElementById('localWalletsText').innerHTML = `---Change local wallet${" (current wallet: "+walletName+")"}:`;
+    showPage("localWalletsPage");
+  }
+
+  function showChangeLocalWalletPage() {
+    let localWallets = JSON.parse(localStorage.getItem('gamble_local_wallets')) || {"walletsArr" : []};
+    let localWalletsList= `\n 0. new wallet`;
+    // localWalletsList += `\n 0. new wallet`;
+    // console.log(localWalletsList);
+    // console.log(localWallets);
+    for(let i = 0; i < localWallets.walletsArr.length; i++){
+      wallet = localWallets.walletsArr[i];
+      // console.log("Wallet: ", localWallets.walletsArr[i], "\n Wallet_: ", localWallets.walletsArr[i][0].gamble_Wallet, "\n Wallet name:", wallet.gamble_Wallet);
+      localWalletsList += `\n ${i+1}. ${wallet.gamble_Wallet}`;
+    };
+    // console.log(localWalletsList);
+    document.getElementById('changeLocalWalletText').innerHTML = `---Which wallet do you want: ${localWalletsList}`;
+    showPage("changeLocalWalletPage");
+  }
+
+  function showThemesPage() {
+    // let background = localStorage.getItem('gamble_background') || "";
+    // let textBox_background = localStorage.getItem('gamble_textBox_background') || "";
+    // let textBox_text = localStorage.getItem('gamble_textBox_text') || "";
+    // let button1 = localStorage.getItem('gamble_button1') || "";
+    // let button1_text = localStorage.getItem('gamble_button1_text') || "";
+    // let button2 = localStorage.getItem('gamble_button2') || "";
+    // let button2_text = localStorage.getItem('gamble_button2_text') || "";
+    document.getElementById('backgroundThemes').value = localStorage.getItem('gamble_background') || "rgb(255, 255, 255)";
+    document.getElementById('textBoxBackgroundThemes').value = localStorage.getItem('gamble_textBox_background') || "rgb(165, 42, 42)";
+    document.getElementById('textBoxTextThemes').value = localStorage.getItem('gamble_textBox_text') || "rgb(0, 0, 0)";
+    document.getElementById('button1Themes').value = localStorage.getItem('gamble_button1') || "rgb(233, 196, 196)";
+    document.getElementById('button1TextThemes').value = localStorage.getItem('gamble_button1_text') || "rgb(0, 0, 0)";
+    document.getElementById('button2Themes').value = localStorage.getItem('gamble_button2') || "rgb(226, 20, 20)";
+    document.getElementById('button2TextThemes').value = localStorage.getItem('gamble_button2_text') || "rgb(0, 0, 0)";
+    showPage("themesPage");
+  }
+
+  function showSecretShopPage() {
+    document.getElementById('secretShopText').innerHTML = `---Let's check ${localStorage.getItem('gamble_Wallet') || "your"} buddy's stats: \n (your balance is ${localStorage.getItem('gamble_Balance') || 0}) \n -Atk: ${localStorage.getItem('gamble_buddy_atk') || 0}, \n -Def: ${localStorage.getItem('gamble_buddy_def') || 0}, \n -Intl: ${localStorage.getItem('gamble_buddy_intl') || 0}, \n -Skill: ${localStorage.getItem('gamble_buddy_skill') || 0},`;
+    showPage("secretShopPage");
+  }
+
+  function showSecretShopUpgradePage(upgrade) {
+    document.getElementById('secretShopUpgradeText').innerHTML = `---Enter upgrade amount for ${upgrade}:`;
+    selectedUpgrade = upgrade;
+    showPage("secretShopUpgradePage");
+  }
+
+  function gamble() {
+    const input = document.getElementById('amountInput');
+    const amount = Number(input.value);
+    let balance = Number(localStorage.getItem('gamble_Balance')) || 0;
+    if(balance<amount) {
+      alert(`---£${amount} is invalid.`);
+      input.value = "";
+      hidePage("playAmountPage");
+      showMainPage();
+      return;
+    }
+    if(amount>-1) {
+      let winPercentage = Math.floor(Math.random() * 101);
+      let winDecimal = winPercentage / 100;
+      let winNonSign = Math.round(winDecimal * amount);
+      let winSign = Math.random() < 0.5 ? -1 : 1
+      let win = winNonSign * winSign;
+      let acheivment;
+      if(winSign==1){
+        acheivment = "won ";
+      }else{
+        acheivment = "lost -";
+      };
+      balance += win;
+      localStorage.setItem('gamble_Balance', balance);
+      document.getElementById('rewardText').textContent = `---You ${acheivment}£${winNonSign}; ${(win/amount)*100}%!`;
+      input.value = "";
+      hidePage("playAmountPage");
+      showPage("playRewardPage");
+    } else {
+      alert("---The min you can gamble is £0!")
+      input.value = "";
+      hidePage("playAmountPage");
+      showMainPage();
+    }
+  }
+
+  function applyDebt() {
+    const input = document.getElementById('debtInput');
+    const newDebt = Number(input.value);
+    if(newDebt<=1) {
+    let balance = Number(localStorage.getItem('gamble_Balance')) || 0;
+    let debt = Number(localStorage.getItem('gamble_Debt')) || 0;
+    balance += newDebt;
+    debt += newDebt;
+    localStorage.setItem('gamble_Debt', debt);
+    localStorage.setItem('gamble_Balance', balance);
+    } else {
+      alert("---The max debt you can get in one go is £1!")
+    }
+    input.value = "";
+    hidePage("debtPage");
+    showMainPage();
+  }
+
+  function applyNotes() {
+    const input = document.getElementById('notesInput');
+    const newNotes = input.value;
+    localStorage.setItem('gamble_Notes', newNotes);
+    input.value = "";
+    hidePage("notesPage");
+    showMainPage();
+  }
+
+  function applyNewWalletName() {
+    const input = document.getElementById('renameWalletInput');
+    const newNotes = input.value;
+    localStorage.setItem('gamble_Wallet', newNotes);
+    input.value = "";
+    hidePage("renameWalletPage");
+    showMainPage();
+  }
+
+  function applyChangeLocalWallet() {
+    const input = document.getElementById('changeLocalWalletInput');
+    const newInput = input.value;
+    let localWallets = JSON.parse(localStorage.getItem('gamble_local_wallets')) || {"walletsArr" : []};
+    let previousWalletName = localStorage.getItem('gamble_Wallet') || "";
+    if(previousWalletName == "") {previousWalletName = window.prompt("---What do you want to call your current wallet?","");};
+    localStorage.setItem('gamble_Wallet', previousWalletName);
+    if(0<newInput && newInput<=localWallets.walletsArr.length) {
+      let walletIndex = newInput-1;
+      let previousWalletJSONForm;
+      previousWalletJSONForm = {
+        "gamble_Balance" : (parseInt(localStorage.getItem('gamble_Balance')) || 0), 
+        "gamble_Debt" : (parseInt(localStorage.getItem('gamble_Debt')) || 0), 
+        "gamble_Wallet" : (previousWalletName),
+        "gamble_Notes" : (localStorage.getItem('gamble_Notes') || ""), 
+        "gamble_buddy_atk" : (parseInt(localStorage.getItem('gamble_buddy_atk')) || 0), 
+        "gamble_buddy_def" : (parseInt(localStorage.getItem('gamble_buddy_def')) || 0), 
+        "gamble_buddy_intl" : (parseInt(localStorage.getItem('gamble_buddy_intl')) || 0), 
+        "gamble_buddy_skill" : (parseInt(localStorage.getItem('gamble_buddy_skill')) || 0), };
+      const newLocalWalletsArr = [...localWallets.walletsArr];
+      // console.log("localWallets: ", localWallets);
+      // console.log("Get localWallets.walletsArr as newLocalWalletsArr: ", newLocalWalletsArr);
+      newLocalWalletsArr.splice(walletIndex, 1);
+      // console.log("splice walletIndex, 1 :", newLocalWalletsArr);
+      newLocalWalletsArr.push(previousWalletJSONForm);
+      // console.log("push previousWalletJSONForm: ", newLocalWalletsArr);
+      // console.log(newLocalWalletsArr, newLocalWalletsArr.walletsArr, walletIndex)
+      // console.log(localWallets);
+      localStorage.setItem('gamble_local_wallets', JSON.stringify({"walletsArr" : newLocalWalletsArr}));
+
+      localStorage.setItem('gamble_Balance', localWallets.walletsArr[walletIndex].gamble_Balance);
+      localStorage.setItem('gamble_Debt', localWallets.walletsArr[walletIndex].gamble_Debt);
+      localStorage.setItem('gamble_Wallet', localWallets.walletsArr[walletIndex].gamble_Wallet);
+      localStorage.setItem('gamble_Notes', localWallets.walletsArr[walletIndex].gamble_Notes);
+      localStorage.setItem('gamble_buddy_atk', localWallets.walletsArr[walletIndex].gamble_buddy_atk);
+      localStorage.setItem('gamble_buddy_def', localWallets.walletsArr[walletIndex].gamble_buddy_def);
+      localStorage.setItem('gamble_buddy_intl', localWallets.walletsArr[walletIndex].gamble_buddy_intl);
+      localStorage.setItem('gamble_buddy_skill', localWallets.walletsArr[walletIndex].gamble_buddy_skill);
+    } else if(0 == newInput) {
+      let previousWalletJSONForm;
+      previousWalletJSONForm = {
+        "gamble_Balance" : (parseInt(localStorage.getItem('gamble_Balance')) || 0), 
+        "gamble_Debt" : (parseInt(localStorage.getItem('gamble_Debt')) || 0), 
+        "gamble_Wallet" : (previousWalletName),
+        "gamble_Notes" : (localStorage.getItem('gamble_Notes') || ""), 
+        "gamble_buddy_atk" : (parseInt(localStorage.getItem('gamble_buddy_atk')) || 0), 
+        "gamble_buddy_def" : (parseInt(localStorage.getItem('gamble_buddy_def')) || 0), 
+        "gamble_buddy_intl" : (parseInt(localStorage.getItem('gamble_buddy_intl')) || 0), 
+        "gamble_buddy_skill" : (parseInt(localStorage.getItem('gamble_buddy_skill')) || 0), };
+      let newLocalWallets = localWallets;
+      newLocalWallets.walletsArr.push(previousWalletJSONForm);
+      // console.log(previousWalletJSONForm);
+      // console.log(newLocalWallets);
+      localStorage.setItem('gamble_local_wallets', JSON.stringify(newLocalWallets));
+
+      localStorage.setItem('gamble_Balance', 0);
+      localStorage.setItem('gamble_Debt', 0);
+      localStorage.setItem('gamble_Wallet', "");
+      localStorage.setItem('gamble_Notes', "");
+      localStorage.setItem('gamble_buddy_atk', 0);
+      localStorage.setItem('gamble_buddy_def', 0);
+      localStorage.setItem('gamble_buddy_intl', 0);
+      localStorage.setItem('gamble_buddy_skill', 0);
+    } else {
+      alert("---That isn't what i asked for!");
+    };
+    // localStorage.setItem('gamble_Wallet', newNotes);
+    input.value = "";
+    hidePage("changeLocalWalletPage");
+    showMainPage();
+  }
+
+  function applyDeleteActiveWallet() {
+    var confirmation = confirm(`Are you sure you want to delete your ${localStorage.getItem('gamble_Wallet') || "current"} wallet forever (this is a very long time).`);
+    if(confirmation==true) {
+      let localWallets = JSON.parse(localStorage.getItem('gamble_local_wallets')) || {"walletsArr" : []};
+      if(localWallets.walletsArr.length>=1) {
+        localStorage.setItem('gamble_Balance', localWallets.walletsArr[0].gamble_Balance);
+        localStorage.setItem('gamble_Debt', localWallets.walletsArr[0].gamble_Debt);
+        localStorage.setItem('gamble_Wallet', localWallets.walletsArr[0].gamble_Wallet);
+        localStorage.setItem('gamble_Notes', localWallets.walletsArr[0].gamble_Notes);
+        localStorage.setItem('gamble_buddy_atk', localWallets.walletsArr[0].gamble_buddy_atk);
+        localStorage.setItem('gamble_buddy_def', localWallets.walletsArr[0].gamble_buddy_def);
+        localStorage.setItem('gamble_buddy_intl', localWallets.walletsArr[0].gamble_buddy_intl);
+        localStorage.setItem('gamble_buddy_skill', localWallets.walletsArr[0].gamble_buddy_skill);
+
+        const newLocalWalletsArr = [...localWallets.walletsArr];
+        newLocalWalletsArr.splice(0, 1);
+        localStorage.setItem('gamble_local_wallets', JSON.stringify({"walletsArr" : newLocalWalletsArr}));
+      } else {
+      localStorage.setItem('gamble_Balance', 0);
+      localStorage.setItem('gamble_Debt', 0);
+      localStorage.setItem('gamble_Wallet', "");
+      localStorage.setItem('gamble_Notes', "");
+      localStorage.setItem('gamble_buddy_atk', 0);
+      localStorage.setItem('gamble_buddy_def', 0);
+      localStorage.setItem('gamble_buddy_intl', 0);
+      localStorage.setItem('gamble_buddy_skill', 0);
+      };
+    };
+    hidePage("localWalletsPage");
+    showMainPage();
+  };
+
+  function applyExportLocalWallet() {
+    let exportWalletName = localStorage.getItem('gamble_Wallet') || "";
+    if(exportWalletName == "") {exportWalletName = window.prompt("---What do you want to call your current wallet?","");};
+    localStorage.setItem('gamble_Wallet', exportWalletName);
+    exportWalletJSONForm = {
+        "gamble_Balance" : (parseInt(localStorage.getItem('gamble_Balance')) || 0), 
+        "gamble_Debt" : (parseInt(localStorage.getItem('gamble_Debt')) || 0), 
+        "gamble_Wallet" : (exportWalletName),
+        "gamble_Notes" : (localStorage.getItem('gamble_Notes') || ""), 
+        "gamble_buddy_atk" : (parseInt(localStorage.getItem('gamble_buddy_atk')) || 0), 
+        "gamble_buddy_def" : (parseInt(localStorage.getItem('gamble_buddy_def')) || 0), 
+        "gamble_buddy_intl" : (parseInt(localStorage.getItem('gamble_buddy_intl')) || 0), 
+        "gamble_buddy_skill" : (parseInt(localStorage.getItem('gamble_buddy_skill')) || 0), 
+    };
+    let validJSONFile = JSON.stringify(exportWalletJSONForm);
+    // const blob = new Blob([validJSONFile], { type : 'application/octet-stream'});
+    // console.log(blob);
+    const link = document.createElement("a");
+    link.style.display = "none";
+    link.href = "data:application/octet-stream," + encodeURIComponent(validJSONFile);
+    link.download = exportWalletName + ".gbwallet";
+    link.click();
+
+    let localWallets = JSON.parse(localStorage.getItem('gamble_local_wallets')) || {"walletsArr" : []};
+    if(localWallets.walletsArr.length>=1) {
+        localStorage.setItem('gamble_Balance', localWallets.walletsArr[0].gamble_Balance);
+        localStorage.setItem('gamble_Debt', localWallets.walletsArr[0].gamble_Debt);
+        localStorage.setItem('gamble_Wallet', localWallets.walletsArr[0].gamble_Wallet);
+        localStorage.setItem('gamble_Notes', localWallets.walletsArr[0].gamble_Notes);
+        localStorage.setItem('gamble_buddy_atk', localWallets.walletsArr[0].gamble_buddy_atk);
+        localStorage.setItem('gamble_buddy_def', localWallets.walletsArr[0].gamble_buddy_def);
+        localStorage.setItem('gamble_buddy_intl', localWallets.walletsArr[0].gamble_buddy_intl);
+        localStorage.setItem('gamble_buddy_skill', localWallets.walletsArr[0].gamble_buddy_skill);
+
+        const newLocalWalletsArr = [...localWallets.walletsArr];
+        newLocalWalletsArr.splice(0, 1);
+        localStorage.setItem('gamble_local_wallets', JSON.stringify({"walletsArr" : newLocalWalletsArr}));
+    } else {
+      localStorage.setItem('gamble_Balance', 0);
+      localStorage.setItem('gamble_Debt', 0);
+      localStorage.setItem('gamble_Wallet', "");
+      localStorage.setItem('gamble_Notes', "");
+      localStorage.setItem('gamble_buddy_atk', 0);
+      localStorage.setItem('gamble_buddy_def', 0);
+      localStorage.setItem('gamble_buddy_intl', 0);
+      localStorage.setItem('gamble_buddy_skill', 0);
+    };
+    hidePage("localWalletsPage");
+    showMainPage();
+  };
+
+  function applyImportLocalWallet() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".gbwallet";
+    input.multiple = true;
+    input.click();
+    
+    input.onchange = async () => {
+      // console.log(input.files);
+      for(i=0; i<input.files.length; i++) {
+        // console.log(input.files[i]);};
+      let importFilePromise = new Promise((resolve, reject) => {
+        const file = input.files?.[i];
+        const reader = new FileReader();
+        reader.readAsText(file);
+
+        reader.onload = (e) => {
+          let importFileContents = JSON.parse(e.target.result);
+          // console.log("File content:", importFileContents);
+          resolve(importFileContents);
+        };
+        reader.onerror = function(e) {
+          console.log("File failed to import file, ", e);
+          alert("File failed to import, ", e);
+          reject(e);
+        };
+      });
+
+      let importFileJSON = await importFilePromise.then(function(result) {return result;});
+      // console.log(importFileJSON.gamble_Wallet);
+
+      let localWallets = JSON.parse(localStorage.getItem('gamble_local_wallets')) || {"walletsArr" : []};
+      let previousWalletName = localStorage.getItem('gamble_Wallet') || "";
+      if(previousWalletName == "") {previousWalletName = window.prompt("---What do you want to call your current wallet?","");};
+      localStorage.setItem('gamble_Wallet', previousWalletName);
+
+      let previousWalletJSONForm;
+      previousWalletJSONForm = {
+        "gamble_Balance" : (parseInt(localStorage.getItem('gamble_Balance')) || 0), 
+        "gamble_Debt" : (parseInt(localStorage.getItem('gamble_Debt')) || 0), 
+        "gamble_Wallet" : (previousWalletName),
+        "gamble_Notes" : (localStorage.getItem('gamble_Notes') || ""), 
+        "gamble_buddy_atk" : (parseInt(localStorage.getItem('gamble_buddy_atk')) || 0), 
+        "gamble_buddy_def" : (parseInt(localStorage.getItem('gamble_buddy_def')) || 0), 
+        "gamble_buddy_intl" : (parseInt(localStorage.getItem('gamble_buddy_intl')) || 0), 
+        "gamble_buddy_skill" : (parseInt(localStorage.getItem('gamble_buddy_skill')) || 0), };
+      let newLocalWallets = localWallets;
+      newLocalWallets.walletsArr.push(previousWalletJSONForm);
+      // console.log(previousWalletJSONForm);
+      // console.log(newLocalWallets);
+      localStorage.setItem('gamble_local_wallets', JSON.stringify(newLocalWallets));
+
+      localStorage.setItem('gamble_Balance', importFileJSON.gamble_Balance);
+      localStorage.setItem('gamble_Debt', importFileJSON.gamble_Debt);
+      localStorage.setItem('gamble_Wallet', importFileJSON.gamble_Wallet);
+      localStorage.setItem('gamble_Notes', importFileJSON.gamble_Notes);
+      localStorage.setItem('gamble_buddy_atk', importFileJSON.gamble_buddy_atk);
+      localStorage.setItem('gamble_buddy_def', importFileJSON.gamble_buddy_def);
+      localStorage.setItem('gamble_buddy_intl', importFileJSON.gamble_buddy_intl);
+      localStorage.setItem('gamble_buddy_skill', importFileJSON.gamble_buddy_skill);
+      };
+
+      hidePage("localWalletsPage");
+      showMainPage();
+    };
+  };
+
+  function applyThemes(){
+    localStorage.setItem('gamble_background', document.getElementById('backgroundThemes').value);
+    localStorage.setItem('gamble_textBox_background', document.getElementById('textBoxBackgroundThemes').value);
+    localStorage.setItem('gamble_textBox_text', document.getElementById('textBoxTextThemes').value);
+    localStorage.setItem('gamble_button1', document.getElementById('button1Themes').value);
+    localStorage.setItem('gamble_button1_text', document.getElementById('button1TextThemes').value);
+    localStorage.setItem('gamble_button2', document.getElementById('button2Themes').value);
+    localStorage.setItem('gamble_button2_text', document.getElementById('button2TextThemes').value);
+    document.documentElement.style.cssText = `
+    --gamble_background: ${document.getElementById('backgroundThemes').value}; 
+    --gamble_textBox_background: ${document.getElementById('textBoxBackgroundThemes').value}; 
+    --gamble_textBox_text: ${document.getElementById('textBoxTextThemes').value}; 
+    --gamble_button1: ${document.getElementById('button1Themes').value}; 
+    --gamble_button1_text: ${document.getElementById('button1TextThemes').value}; 
+    --gamble_button2: ${document.getElementById('button2Themes').value}; 
+    --gamble_button2_text: ${document.getElementById('button2TextThemes').value};
+    `;
+    // document.documentElement.style.cssText = --gamble_textBox_background: ${document.getElementById('textBoxBackgroundThemes').value};
+    // document.documentElement.style.cssText = --gamble_textBox_text: ${document.getElementById('textBoxTextThemes').value};
+    // document.documentElement.style.cssText = --gamble_button1: ${document.getElementById('button1Themes').value};
+    // document.documentElement.style.cssText = --gamble_button1_text: ${document.getElementById('button1TextThemes').value};
+    // document.documentElement.style.cssText = --gamble_button2: ${document.getElementById('button2Themes').value};
+    // document.documentElement.style.cssText = --gamble_button2_text: ${document.getElementById('button2TextThemes').value};
+    hidePage("themesPage");
+    showMainPage();
+  }
+
+  function applyUpgrade() {
+    const input = document.getElementById('secretShopUpgradeInput');
+    const newInput = Number(input.value);
+    if(-1<newInput && newInput<=Number(localStorage.getItem('gamble_Balance')) || 0) {
+    let balance = Number(localStorage.getItem('gamble_Balance')) || 0;
+    let selectedUpgradeAmount = Number(localStorage.getItem(`gamble_buddy_${selectedUpgrade}`)) || 0;
+    selectedUpgradeAmount += newInput;
+    balance -= newInput;
+    localStorage.setItem(`gamble_buddy_${selectedUpgrade}`, selectedUpgradeAmount);
+    localStorage.setItem('gamble_Balance', balance);
+    } else {
+      alert("---You cannot spend more than you have in the balance (Or a negative number)!")
+    }
+    input.value = "";
+    hidePage("secretShopUpgradePage");
+    showSecretShopPage();
+  }
+
+  function loadThemes(){
+    document.documentElement.style.cssText = `
+    --gamble_background: ${localStorage.getItem('gamble_background') || "rgb(255, 255, 255)"}; 
+    --gamble_textBox_background: ${localStorage.getItem('gamble_textBox_background') || "rgb(165, 42, 42)"}; 
+    --gamble_textBox_text: ${localStorage.getItem('gamble_textBox_text') || "rgb(0, 0, 0)" };
+    --gamble_button1: ${localStorage.getItem('gamble_button1') || "rgb(233, 196, 196)"}; 
+    --gamble_button1_text: ${localStorage.getItem('gamble_button1_text') || "rgb(0, 0, 0)"}; 
+    --gamble_button2: ${localStorage.getItem('gamble_button2') || "rgb(226, 20, 20)"}; 
+    --gamble_button2_text: ${localStorage.getItem('gamble_button2_text') || "rgb(0, 0, 0)"};
+    `;
+  }
+
+  loadThemes();
+  showMainPage();
+  
+</script>
+</body>
+</html>
